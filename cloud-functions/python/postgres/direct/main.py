@@ -22,7 +22,7 @@ def hello_time(request):
     
     Update below values to connect to your Cloud SQL instance.
     """
-    # create a connection to the Cloud SQL instance's private IP address
+    # Create a connection to the Cloud SQL instance's private IP address
     with psycopg.connect(
         host="10.0.0.1",  # Cloud SQL private IP address
         port="5432",
