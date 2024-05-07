@@ -10,7 +10,7 @@
     --trigger-http \
     --vpc-connector=<VPC_CONNECTOR> \
     --allow-unauthenticated
-    ```
+```
 
 Replace `<REGION>` and `<VPC_CONNECTOR>` with the name of the Google Cloud
 region where you want to deploy your function (for example, us-central1) and the
