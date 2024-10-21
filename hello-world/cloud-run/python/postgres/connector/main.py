@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import atexit
 import os
 
 from flask import Flask
@@ -24,34 +25,45 @@ app = Flask(__name__)
 # lazy initialize global connection pool to improve cold-starts and share
 # connections across requests
 pool = None
+connector = None
 
 
-def init_connection_pool() -> sqlalchemy.engine.Engine:
-    # initialize Cloud SQL Python Connector
-    with Connector(refresh_strategy="lazy") as connector:
+def init_connection_pool(connector: Connector) -> sqlalchemy.engine.Engine:
+    """Helper function to initialize SQLAlchemy connection pool engine with
+    given Cloud SQL Python Connector object."""
 
-        def getconn() -> pg8000.Connection:
-            return connector.connect(
-                "my-project:my-region:my-instance",  # your Cloud SQL instance connection name
-                "pg8000",
-                user="my-user",
-                password="my-password",
-                db="my-database",
-                ip_type="public",  # can also be one of "private" or "psc"
-            )
-
-        return sqlalchemy.create_engine(
-            "postgresql+pg8000://",
-            creator=getconn,
+    def getconn() -> pg8000.Connection:
+        return connector.connect(
+            "my-project:my-region:my-instance",  # Cloud SQL instance connection name
+            "pg8000",
+            user="my-user",
+            password="my-password",
+            db="my-database",
+            ip_type="public",  # can also be one of "private" or "psc"
         )
+
+    return sqlalchemy.create_engine(
+        "postgresql+pg8000://",
+        creator=getconn,
+    )
+
+
+@atexit.register
+def shutdown():
+    """Gracefully close Cloud SQL Python Connector object on app shutdown."""
+    global connector
+    if connector is not None:
+        connector.close()
 
 
 @app.route("/")
 def hello_world():
     """Example Hello World route."""
-    global pool
+    global pool, connector
+    if connector is None:
+        connector = Connector(refresh_strategy="lazy")
     if pool is None:
-        pool = init_connection_pool()
+        pool = init_connection_pool(connector)
     with pool.connect() as conn:
         result = conn.execute(sqlalchemy.text("SELECT 'Hello World!'"))
         return result.scalar()
