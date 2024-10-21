@@ -15,9 +15,9 @@
 import atexit
 import os
 
-from flask import Flask
-import sqlalchemy
 import pg8000
+import sqlalchemy
+from flask import Flask
 from google.cloud.sql.connector import Connector
 
 app = Flask(__name__)
@@ -49,7 +49,7 @@ def init_connection_pool(connector: Connector) -> sqlalchemy.engine.Engine:
 
 
 @atexit.register
-def shutdown():
+def shutdown() -> None:
     """Gracefully close Cloud SQL Python Connector object on app shutdown."""
     global connector
     if connector is not None:
