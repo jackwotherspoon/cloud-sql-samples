@@ -29,7 +29,7 @@ def hello_world():
     """Example Hello World route."""
     global pool
     if pool is None:
-        pool = pool = sqlalchemy.create_engine(
+        pool = sqlalchemy.create_engine(
             # Equivalent URL:
             # postgresql+psycopg://<my-user>:<my-pass>@<host>:<port>/<db-name>
             sqlalchemy.engine.url.URL.create(

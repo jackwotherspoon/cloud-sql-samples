@@ -29,7 +29,7 @@ def hello_world():
     """Example Hello World route."""
     global pool
     if pool is None:
-        pool = pool = sqlalchemy.create_engine(
+        pool = sqlalchemy.create_engine(
             # Equivalent URL:
             # mysql+pymysql://my-user:my-password@/my-database?unix_socket=/cloudsql/my-project:my-region:my-instance
             sqlalchemy.engine.url.URL.create(
