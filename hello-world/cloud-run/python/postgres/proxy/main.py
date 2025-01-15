@@ -29,7 +29,7 @@ def hello_world():
     """Example Hello World route."""
     global pool
     if pool is None:
-        pool = pool = sqlalchemy.create_engine(
+        pool = sqlalchemy.create_engine(
             # Equivalent URL:
             # postgresql+pg8000://<db_user>:<db_pass>@/<db_name>?unix_sock=/cloudsql/my-project:my-region:my-instance/.s.PGSQL.5432
             # Note: Some drivers require the `unix_sock` query parameter to use a different key.
