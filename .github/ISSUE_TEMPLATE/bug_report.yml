@@ -5,6 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
+        > [!IMPORTANT]  
+        > Crucial information necessary for users to succeed.
         Thanks for taking the time to fill out this bug report! Please search [existing issues](https://github.com/google-gemini/gemini-cli/issues) to see if an issue already exists for the bug you encountered.
 
   - type: textarea
